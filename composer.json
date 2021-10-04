@@ -1,5 +1,6 @@
 {
     "name": "antoniputra/reviz",
+    "keywords": ["laravel", "revision", "webadmin", "admin"],
     "description": "Easy way to record and rollback any changes of your Eloquent Entities.",
     "license": "MIT",
     "authors": [
@@ -9,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.2",
         "illuminate/support": "^5.8|^6|^7|^8",
         "laravel/framework": "^5.8|^6|^7|^8"
     },
