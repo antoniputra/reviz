@@ -1,0 +1,39 @@
+{
+    "name": "antoniputra/reviz",
+    "description": "Easy way to record and rollback any changes of your Eloquent Entities.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "antoniputra",
+            "email": "akiddcode@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "illuminate/support": "^5.8|^6|^7|^8",
+        "laravel/framework": "^5.8|^6|^7|^8"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.20"
+    },
+    "autoload": {
+        "psr-4": {
+            "Antoniputra\\Reviz\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Antoniputra\\Reviz\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Antoniputra\\Reviz\\RevizServiceProvider"
+            ],
+            "aliases": {
+                "Reviz": "Antoniputra\\Reviz\\Facades\\Reviz"
+            }
+        }
+    }
+}
