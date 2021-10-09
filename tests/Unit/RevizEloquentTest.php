@@ -12,6 +12,24 @@ class RevizEloquentTest extends TestCase
 {
     use DatabaseTransactions;
 
+    public function testGetUserData_ShouldBasedFromConfig()
+    {
+        extract($this->scenarioUpdatePost());
+        $reviz = $post->revisionList->first();
+
+        $this->assertIsString($reviz->getUserGravatar());
+        $this->assertIsString($reviz->getUserEmail());
+        $this->assertIsString($reviz->getUserName());
+
+        config([
+            'reviz.ui.user_name' => 'wrong_field_name',
+            'reviz.ui.user_email' => 'wrong_field_email',
+        ]);
+        $this->assertNull($reviz->getUserName());
+        $this->assertNull($reviz->getUserEmail());
+        $this->assertNull($reviz->getUserGravatar());
+    }
+
     public function testUser_ShouldGetInstance_BasedOnLaravelAuthConfig()
     {
         extract($this->scenarioUpdatePost());

@@ -12,14 +12,50 @@ trait RevizTrait
         return $this->morphMany(RevizEloquent::class, 'revizable');
     }
 
-    public function revizList()
+    public function revisionList()
     {
         return $this->reviz()->where('is_rollbacked', 0);
     }
 
-    public function revizRollbackList()
+    public function rollbackedList()
     {
         return $this->reviz()->where('is_rollbacked', 1);
+    }
+
+    /**
+     * If ID given, then we need to
+     * rollback the previous revision too
+     * 
+     * @param int $id
+     * @return $this
+     */
+    public function rollback(?int $id = null)
+    {
+        $revisions = $this->revisionList;
+        
+        if ($revisions->isEmpty()) {
+            return;
+        }
+
+        if (! $id) {
+            $revisions->first()->rollback();
+            return $this->refresh();
+        }
+
+        $ids = [];
+        $revisions->each(function ($item) use ($id, &$ids) {
+            // Stop the iteration
+            if ($item->id == $id) {
+                $item->rollback();
+                return false;
+            }
+
+            // Collect id
+            $ids[] = $item->id;
+        });
+
+        $this->revisionList()->bulkMarkAsRollbacked($ids);
+        return $this->refresh();
     }
 
     public static function boot()

@@ -112,6 +112,11 @@ class RevizManager
         return true;
     }
 
+    public function batchRollback(int $batch)
+    {
+        return (new RevizEloquent)->batchRollback($batch);
+    }
+
     /**
      * Prepare data before store to the database
      * @return array

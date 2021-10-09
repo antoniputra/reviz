@@ -1,6 +1,6 @@
 {
     "name": "antoniputra/reviz",
-    "keywords": ["laravel", "revision", "webadmin", "admin"],
+    "keywords": ["laravel", "revision", "monitoring", "webadmin"],
     "description": "Easy way to record and rollback any changes of your Eloquent Entities.",
     "license": "MIT",
     "authors": [

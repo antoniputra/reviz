@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "dev": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "prod": "mix --production",
+    "dev:tailwind": "TAILWIND_MODE=watch postcss ./src/app.scss -o ./public/dist/app.css --watch --verbose",
+    "build:tailwind": "NODE_ENV=production postcss ./src/app.scss -o ./public/dist/app.css"
+  },
+  "author": "akiddcode@gmail.com",
+  "devDependencies": {
+    "autoprefixer": "^10.3.6",
+    "cross-env": "^7.0.3",
+    "laravel-mix": "^6.0.31",
+    "postcss": "^8.3.8",
+    "postcss-import": "^14.0.2",
+    "resolve-url-loader": "^4.0.0",
+    "sass": "^1.42.1",
+    "sass-loader": "^12.1.0",
+    "tailwindcss": "^2.2.16"
+  }
+}

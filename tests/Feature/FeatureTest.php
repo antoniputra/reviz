@@ -121,7 +121,7 @@ class FeatureTest extends TestCase
         ]);
     }
 
-    public function testPackage_AbleToLogChanges_WithCustomResponsibleUser()
+    public function testPackage_AbleToLogChanges_WithCustomAuthDriver()
     {
         $auth = $this->createAuth();
         Reviz::setUser(function () use ($auth) {
@@ -200,7 +200,7 @@ class FeatureTest extends TestCase
         ]);
     }
 
-    public function testPackage_AbleToIgnoreFieldToBeLogged_FromEntityProperty()
+    public function testPackage_AbleToIgnoreFieldToBeLogged_FromModelPropertyConfig()
     {
         $post = Post::create([
             'title' => 'one',
@@ -250,24 +250,111 @@ class FeatureTest extends TestCase
         ]);
     }
     
-    public function testPackage_AbleToGetRevizList()
+    public function testPackage_TargetModel_AbleToUtilizeRevizRelations()
     {
         $user = $this->helperUpdateUser();
         event(new RevizStoreEvent('manual'));
 
         $this->assertInstanceOf(Collection::class, $user->reviz);
-        $this->assertInstanceOf(Collection::class, $user->revizList);
-        $this->assertInstanceOf(Collection::class, $user->revizRollbackList);
+        $this->assertInstanceOf(Collection::class, $user->revisionList);
+        $this->assertInstanceOf(Collection::class, $user->rollbackedList);
     }
 
-    public function testPackage_AbleTo_SingleRollbackById()
+    public function testPackage_ShouldReturnNull_WhenThereIsNoRevisionsData()
     {
-        $this->assertTrue(true);
+        $user = User::create([
+            'name' => 'Antoni',
+            'email' => 'me@antoniputra.com',
+            'password' => \Hash::make('456'),
+        ]);
+
+        $this->assertNull($user->rollback());
     }
 
-    public function testPackage_AbleTo_BatchRollbackByBatch()
+    public function testPackage_AbleTo_SingleRollback()
     {
-        $this->assertTrue(true);
+        // Create changes
+        $user = $this->helperUpdateUser();
+        event(new RevizStoreEvent('manual'));
+
+        // Rollback Changes
+        $user->rollback();
+
+        // Database should updated
+        $this->assertDatabaseHas($user->getTable(), [
+            'name' => 'Antoni'
+        ]);
+        // Model should got fresh attribute
+        $this->assertEquals('Antoni', $user->name);
+        // Model should have 1 rollbacked items
+        $this->assertEquals(1, $user->rollbackedList()->count());
+    }
+    
+    public function testPackage_AbleTo_SingleRollback_ToSpecificId()
+    {
+        // Create & Make Changes #1
+        $user = $this->helperUpdateUser();
+
+        // Make Changes #2
+        $user->name = 'Rodriguez';
+        $user->save();
+
+        // Make Changes #3
+        $user->name = 'Sobirin';
+        $user->save();
+
+        // Make Changes #4
+        $user->name = 'Bejo';
+        $user->save();
+
+        event(new RevizStoreEvent('manual'));
+
+        // Rollback to Changes #3
+        $changesThree = $user->revisionList->skip(2)->take(1)->first();
+        $user->rollback($changesThree->id);
+
+        // Database should updated
+        $this->assertDatabaseHas($user->getTable(), [
+            'name' => 'Rodriguez'
+        ]);
+        // Model should got fresh attribute
+        $this->assertEquals('Rodriguez', $user->name);
+        // Model should have 1 rollbacked items
+        $this->assertEquals(3, $user->rollbackedList()->count());
+    }
+
+    public function testPackage_AbleTo_BatchRollback()
+    {
+        // Initiate & Changes Batch #1
+        $user = $this->helperUpdateUser();
+        $post = $this->helperUpdatePost($user);
+        $post->title = 'Dummy Updated';
+        $user->save();
+        event(new RevizStoreEvent('manual'));
+        
+        // Changes Batch #2
+        $user->name = 'Antoni';
+        $user->save();
+        $post->title = 'Reviz Blog';
+        $post->save();
+        event(new RevizStoreEvent('manual'));
+        
+        // Changes Batch #3
+        $user->name = 'Sobirin';
+        $user->save();
+        $post->title = 'abc';
+        $post->save();
+        event(new RevizStoreEvent('manual'));
+
+        Reviz::batchRollback(3);
+
+        // We should expect our model values should be in Batch #2
+        $this->assertDatabaseHas($user->getTable(), [
+            'name' => 'Antoni'
+        ]);
+        $this->assertDatabaseHas($post->getTable(), [
+            'title' => 'Reviz Blog'
+        ]);
     }
 
     /**
