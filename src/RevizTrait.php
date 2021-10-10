@@ -4,6 +4,7 @@ namespace Antoniputra\Reviz;
 
 use Antoniputra\Reviz\Facades\Reviz;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Arr;
 
 trait RevizTrait
 {
@@ -58,15 +59,15 @@ trait RevizTrait
         return $this->refresh();
     }
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+    //     parent::boot();
 
-        $tableName = with(new static)->getTable();
-        Relation::morphMap([
-            $tableName => get_class(),
-        ]);
-    }
+    //     // $tableName = with(new static)->getTable();
+    //     // Relation::morphMap([
+    //     //     $tableName => get_class(),
+    //     // ]);
+    // }
 
     public static function bootRevizTrait()
     {
@@ -94,9 +95,14 @@ trait RevizTrait
 
         $changesKeys = array_keys($changes);
         $original = collect($this->getOriginal())->only($changesKeys);
+        $morphString = get_class($this);
+        if ($morphMapConfig = config('reviz.morphMap')) {
+            $morphMapConfig = array_flip($morphMapConfig);
+            $morphString = Arr::get($morphMapConfig, $morphString, $morphString);
+        }
 
         Reviz::pushItems([
-            'revizable_type' => $this->getTable(),
+            'revizable_type' => $morphString,
             'revizable_id' => $this->id,
             'old_value' => $original->toArray(),
             'new_value' => $changes,

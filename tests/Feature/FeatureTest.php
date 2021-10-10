@@ -181,6 +181,27 @@ class FeatureTest extends TestCase
         ]);
     }
 
+    public function testPackage_AbleToGetCustomMorphMap_FromGlobalConfig()
+    {
+        config([
+            'reviz.morphMap' => [
+                'users' => User::class,
+                'posts' => Post::class,
+            ]
+        ]);
+
+        $response = $this->put('/endpoint-update');
+        $response->assertOk();
+
+        $revizTable = (new RevizEloquent)->getTable();
+        $this->assertDatabaseHas($revizTable, [
+            'revizable_type' => 'users',
+        ]);
+        $this->assertDatabaseHas($revizTable, [
+            'revizable_type' => 'posts',
+        ]);
+    }
+
     public function testPackage_AbleToIgnoreFieldToBeLogged_FromGlobalConfig()
     {
         config(['reviz.ignore_fields' => ['updated_at', 'content']]);
@@ -260,7 +281,7 @@ class FeatureTest extends TestCase
         $this->assertInstanceOf(Collection::class, $user->rollbackedList);
     }
 
-    public function testPackage_ShouldReturnNull_WhenThereIsNoRevisionsData()
+    public function testPackage_RollbackShouldReturnNull_WhenThereIsNoRevisionsData()
     {
         $user = User::create([
             'name' => 'Antoni',

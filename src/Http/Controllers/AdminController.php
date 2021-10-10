@@ -3,6 +3,7 @@
 namespace Antoniputra\Reviz\Http\Controllers;
 
 use Antoniputra\Reviz\RevizRepository;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Controller;
 
 class AdminController extends Controller
@@ -16,9 +17,18 @@ class AdminController extends Controller
 
     public function index()
     {
-        $rows = $this->repo->getListForRollback();
+        // dd(Relation::morphMap());
+        $revisions = $this->repo->getListForRollback(2);
         return view('reviz::index', [
-            'rows' => $rows
+            'revisions' => $revisions
+        ]);
+    }
+
+    public function show($id)
+    {
+        $revision = $this->repo->getById($id);
+        return view('reviz::show', [
+            'revision' => $revision
         ]);
     }
 }

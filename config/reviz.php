@@ -13,6 +13,16 @@ return [
     ],
 
     /**
+     * You might optionally defines your models
+     * custom morph map with Reviz table
+     * 
+     * @var array
+     */
+    'morphMap' => [
+        // 'users' => App\User::class,
+    ],
+
+    /**
      * UI Settings
      */
     'ui' => [

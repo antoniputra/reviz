@@ -112,6 +112,12 @@ class RevizManager
         return true;
     }
 
+    /**
+     * Perform batch rollback
+     * 
+     * @param int $batch
+     * @return void
+     */
     public function batchRollback(int $batch)
     {
         return (new RevizEloquent)->batchRollback($batch);
@@ -119,6 +125,7 @@ class RevizManager
 
     /**
      * Prepare data before store to the database
+     * 
      * @return array
      */
     private function transformData($event): array
@@ -141,6 +148,7 @@ class RevizManager
 
     /**
      * Build Funnel information
+     * 
      * @return array
      */
     private function buildFunnelInfo($event): array
@@ -163,6 +171,7 @@ class RevizManager
 
     /**
      * Get the fresh batch
+     * 
      * @return int
      */
     private function getNewBatch(): int

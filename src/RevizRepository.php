@@ -15,11 +15,11 @@ class RevizRepository
 
     public function getListForRollback($perPage = 10)
     {
-        return $this->model->paginate($perPage);
+        return $this->model->with('revizable', 'user')->paginate($perPage);
     }
 
-    public function getByBatch()
+    public function getById($id)
     {
-        return [];
+        return $this->model->with('revizable', 'user')->find($id);
     }
 }

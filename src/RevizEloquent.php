@@ -2,6 +2,7 @@
 
 namespace Antoniputra\Reviz;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -55,6 +56,13 @@ class RevizEloquent extends Model
     public function getFunnelDetailAttribute($value)
     {
         return $value ? json_decode($value, true) : null;
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        if ($value) {
+            return Carbon::parse($value);
+        }
     }
 
     public function rollback()

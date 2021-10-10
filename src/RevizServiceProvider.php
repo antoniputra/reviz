@@ -3,6 +3,7 @@
 namespace Antoniputra\Reviz;
 
 use Antoniputra\Reviz\Facades\Reviz;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -11,6 +12,7 @@ class RevizServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->mapEloquentMorph();
         $this->registerResources();
         $this->registerEvents();
         
@@ -31,6 +33,13 @@ class RevizServiceProvider extends ServiceProvider
         $this->app->singleton(RevizManager::class, function () {
             return new RevizManager;
         });
+    }
+
+    protected function mapEloquentMorph()
+    {
+        if ($morphMaps = $this->app['config']->get('reviz.morphMap')) {
+            Relation::morphMap($morphMaps);
+        }
     }
 
     protected function registerResources()
