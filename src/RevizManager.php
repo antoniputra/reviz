@@ -131,12 +131,9 @@ class RevizManager
     private function transformData($event): array
     {
         $auth = $this->getUser();
-        $funnel = $this->buildFunnelInfo($event);
         $batch = $this->getNewBatch();
         $now = now();
-        return $this->getItems()->map(function ($item) use ($auth, $funnel, $batch, $now) {
-            $item['funnel'] = $funnel['type'];
-            $item['funnel_detail'] = $funnel['detail'];
+        return $this->getItems()->map(function ($item) use ($auth, $batch, $now) {
             $item['batch'] = $batch;
             $item['created_at'] = $now;
             $item['user_id'] = optional($auth)->id;
@@ -144,29 +141,6 @@ class RevizManager
             $item['new_value'] = json_encode($item['new_value']);
             return $item;
         })->toArray();
-    }
-
-    /**
-     * Build Funnel information
-     * 
-     * @return array
-     */
-    private function buildFunnelInfo($event): array
-    {
-        $result = [];
-        if ($event instanceof RequestHandled) {
-            $result['type'] = 'http';
-            $result['detail'] = json_encode([
-                'path' => $event->request->path()
-            ]);
-        }
-
-        if ($event instanceof RevizStoreEvent) {
-            $result['type'] = $event->type;
-            $result['detail'] = is_array($event->value) ? json_encode($event->value) : $event->value;
-        }
-
-        return $result;
     }
 
     /**

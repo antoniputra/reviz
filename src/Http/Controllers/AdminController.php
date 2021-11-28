@@ -17,8 +17,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        // dd(Relation::morphMap());
-        $revisions = $this->repo->getListForRollback(2);
+        $revisions = $this->repo->getListForRollback(5);
         return view('reviz::index', [
             'revisions' => $revisions
         ]);

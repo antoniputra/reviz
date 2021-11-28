@@ -47,7 +47,6 @@ class RevizEloquentTest extends TestCase
 
         $this->assertIsArray($reviz->old_value);
         $this->assertIsArray($reviz->new_value);
-        $this->assertIsArray($reviz->funnel_detail);
     }
 
     public function testCreatedAt_ShouldAutomaticallyFilled_WhenCreateRowViaEloquent()
@@ -58,8 +57,6 @@ class RevizEloquentTest extends TestCase
             'user_id' => 1,
             'old_value' => json_encode(['field' => 'value']),
             'new_value' => json_encode(['field' => 'value updated']),
-            'funnel' => 'other',
-            'funnel_detail' => json_encode(['class' => 'DummyClass']),
             'batch' => 1,
         ]);
 

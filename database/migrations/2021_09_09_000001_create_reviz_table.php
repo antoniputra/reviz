@@ -20,8 +20,6 @@ class CreateRevizTable extends Migration
             $table->unsignedBigInteger('user_id')->index()->nullable();
             $table->text('old_value')->nullable();
             $table->text('new_value')->nullable();
-            $table->string('funnel')->index()->nullable();
-            $table->text('funnel_detail')->nullable();
             $table->unsignedBigInteger('batch')->default(0);
             $table->boolean('is_rollbacked')->default(0);
             $table->timestamp('created_at')->nullable();

@@ -8,10 +8,12 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="{{asset('/vendor/reviz/favicon.ico')}}">
     <link href="{{ asset(mix('reviz.css', 'vendor/reviz')) }}" rel="stylesheet" type="text/css">
+
+    @stack('styles')
 </head>
 <body>
     <div class="flex justify-center py-2 mb-10 border-b shadow">
-        <a href="" class="flex hover:opacity-50">
+        <a href="{{route('revizPanel.index')}}" class="flex hover:opacity-50">
             <img src="{{asset('/vendor/reviz/favicon.ico')}}" class="mr-2">
             <h1 class="text-2xl">Reviz Panel</h1>
         </a>
@@ -22,5 +24,6 @@
     </div>
 
     <script src="{{asset(mix('reviz.js', 'vendor/reviz'))}}"></script>
+    @stack('scripts')
 </body>
 </html>

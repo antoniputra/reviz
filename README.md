@@ -12,7 +12,6 @@ Easy way to record and rollback any changes of your Eloquent Entities.
 
 - √ Monitor your Eloquent changes.
 - √ Filter specific fields to be monitored.
-- √ Monitor based on `funnel`
 - √ Single Rollback to specific state
 - √ Group rollback by batch
 - [soon] GUI
@@ -20,4 +19,19 @@ Easy way to record and rollback any changes of your Eloquent Entities.
 
 ## How to use
 
-Lorem ipsum
+Just put `RevizTrait` to your desired Eloquent Models. e.g:
+
+```php
+namespace App;
+
+use Antoniputra\Reviz\RevizTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Post extends Model
+{
+    use SoftDeletes, RevizTrait;
+
+    ...
+}
+```

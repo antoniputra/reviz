@@ -76,7 +76,8 @@ class RevizServiceProvider extends ServiceProvider
     private function registerRoutes()
     {
         Route::group($this->routeConfiguration(), function () {
-            Route::get('/', 'AdminController@index');
+            Route::get('/', 'AdminController@index')->name('revizPanel.index');
+            Route::get('/{id}/show', 'AdminController@show')->name('revizPanel.show');
         });
     }
 

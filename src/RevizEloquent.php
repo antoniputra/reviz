@@ -52,10 +52,10 @@ class RevizEloquent extends Model
     {
         return $value ? json_decode($value, true) : null;
     }
-    
-    public function getFunnelDetailAttribute($value)
+
+    public function getCountFieldsAttribute()
     {
-        return $value ? json_decode($value, true) : null;
+        return count($this->old_value);
     }
 
     public function getCreatedAtAttribute($value)
@@ -63,6 +63,11 @@ class RevizEloquent extends Model
         if ($value) {
             return Carbon::parse($value);
         }
+    }
+
+    public function getCreatedAtFormattedAttribute()
+    {
+        return optional($this->created_at)->format('D, d M Y - H.i');
     }
 
     public function rollback()

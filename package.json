@@ -10,6 +10,8 @@
   "author": "akiddcode@gmail.com",
   "devDependencies": {
     "autoprefixer": "^10.3.6",
+    "browser-sync": "^2.27.5",
+    "browser-sync-webpack-plugin": "^2.3.0",
     "cross-env": "^7.0.3",
     "laravel-mix": "^6.0.31",
     "postcss": "^8.3.8",
@@ -18,5 +20,8 @@
     "sass": "^1.42.1",
     "sass-loader": "^12.1.0",
     "tailwindcss": "^2.2.16"
+  },
+  "dependencies": {
+    "diff": "^5.0.0"
   }
 }

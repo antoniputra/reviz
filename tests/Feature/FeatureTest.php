@@ -145,42 +145,6 @@ class FeatureTest extends TestCase
         ]);
     }
 
-    public function testPackage_AbleToLogFunnel_WhenEntityUpdated()
-    {
-        $auth = $this->createAuth();
-        $response = $this->put('/endpoint-update');
-        $response->assertOk();
-
-        $revizTable = (new RevizEloquent)->getTable();
-        $this->assertDatabaseHas($revizTable, [
-            'user_id'       => $auth->id,
-            'funnel'        => 'http',
-            'funnel_detail' => json_encode(['path' => 'endpoint-update']),
-        ]);
-    }
-    
-    public function testPackage_AbleToLogCustomFunnel_ByTriggeringManually()
-    {
-        $post = Post::create([
-            'title' => 'one',
-            'content' => 'lorem',
-        ]);
-        $post->update([
-            'title' => 'one updated'
-        ]);
-        event(new RevizStoreEvent('command', [
-            'class' => 'DummyCommandClass'
-        ]));
-
-        $revizTable = (new RevizEloquent)->getTable();
-        $this->assertDatabaseHas($revizTable, [
-            'funnel'        => 'command',
-            'funnel_detail' => json_encode(['class' => 'DummyCommandClass']),
-            'old_value'     => json_encode(['title' => 'one']),
-            'new_value'     => json_encode(['title' => 'one updated']),
-        ]);
-    }
-
     public function testPackage_AbleToGetCustomMorphMap_FromGlobalConfig()
     {
         config([
@@ -350,22 +314,23 @@ class FeatureTest extends TestCase
         $user = $this->helperUpdateUser();
         $post = $this->helperUpdatePost($user);
         $post->title = 'Dummy Updated';
+        $post->save();
         $user->save();
-        event(new RevizStoreEvent('manual'));
+        event(new RevizStoreEvent);
         
         // Changes Batch #2
         $user->name = 'Antoni';
         $user->save();
         $post->title = 'Reviz Blog';
         $post->save();
-        event(new RevizStoreEvent('manual'));
+        event(new RevizStoreEvent);
         
         // Changes Batch #3
         $user->name = 'Sobirin';
         $user->save();
         $post->title = 'abc';
         $post->save();
-        event(new RevizStoreEvent('manual'));
+        event(new RevizStoreEvent);
 
         Reviz::batchRollback(3);
 
