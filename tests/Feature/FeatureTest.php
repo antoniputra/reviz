@@ -10,25 +10,12 @@ use Antoniputra\Reviz\Tests\Fixtures\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class FeatureTest extends TestCase
 {
     use DatabaseTransactions;
-
-    /**
-     * Define routes setup.
-     *
-     * @param  \Illuminate\Routing\Router  $router
-     *
-     * @return void
-     */
-    protected function defineRoutes($router)
-    {
-        $router->put('/endpoint-update', function () {
-            $this->sampleUpdateProcess();
-        });
-    }
 
     public function testPackage_QueryInsert_ShouldOneTime()
     {
@@ -71,7 +58,7 @@ class FeatureTest extends TestCase
         $user = User::create([
             'name' => 'Antoni',
             'email' => 'me@antoniputra.com',
-            'password' => \Hash::make('456'),
+            'password' => Hash::make('456'),
         ]);
         $user->name = 'Antoni';
         $user->save();
@@ -250,7 +237,7 @@ class FeatureTest extends TestCase
         $user = User::create([
             'name' => 'Antoni',
             'email' => 'me@antoniputra.com',
-            'password' => \Hash::make('456'),
+            'password' => Hash::make('456'),
         ]);
 
         $this->assertNull($user->rollback());
@@ -341,43 +328,5 @@ class FeatureTest extends TestCase
         $this->assertDatabaseHas($post->getTable(), [
             'title' => 'Reviz Blog'
         ]);
-    }
-
-    /**
-     * Updating User and Post at once for testing purpose.
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    private function sampleUpdateProcess()
-    {
-        $user = $this->helperUpdateUser();
-        $post = $this->helperUpdatePost($user);
-
-        return 'success';
-    }
-
-    private function helperUpdateUser()
-    {
-        $user = User::create([
-            'name' => 'Antoni',
-            'email' => 'me@antoniputra.com',
-            'password' => \Hash::make('456'),
-        ]);
-        $user->name = 'Antoni changed';
-        $user->save();
-        return $user;
-    }
-
-    private function helperUpdatePost($user)
-    {
-        $post = $user->posts()->create([
-            'title' => 'hello world',
-            'content' => 'lorem ipsum'
-        ]);
-        $post->update([
-            'title' => 'hello world updated',
-            'content' => 'lorem ipsum updated',
-        ]);
-        return $post;
     }
 }

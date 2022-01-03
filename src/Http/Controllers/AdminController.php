@@ -2,6 +2,7 @@
 
 namespace Antoniputra\Reviz\Http\Controllers;
 
+use Antoniputra\Reviz\Http\Middleware\Authenticate;
 use Antoniputra\Reviz\RevizRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Controller;
@@ -12,6 +13,7 @@ class AdminController extends Controller
 
     public function __construct(RevizRepository $repo)
     {
+        $this->middleware(Authenticate::class);
         $this->repo = $repo;
     }
 
@@ -26,6 +28,10 @@ class AdminController extends Controller
     public function show($id)
     {
         $revision = $this->repo->getById($id);
+        if (!$revision) {
+            abort(404);
+        }
+
         return view('reviz::show', [
             'revision' => $revision
         ]);

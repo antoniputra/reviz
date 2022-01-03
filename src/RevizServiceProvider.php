@@ -26,6 +26,10 @@ class RevizServiceProvider extends ServiceProvider
 
     public function register()
     {
+        if (! defined('REVIZ_PATH')) {
+            define('REVIZ_PATH', realpath(__DIR__.'/../'));
+        }
+
         $this->mergeConfigFrom(
             __DIR__.'/../config/reviz.php', 'reviz'
         );
@@ -65,7 +69,7 @@ class RevizServiceProvider extends ServiceProvider
         $this->registerRoutes();
 
         $this->publishes([
-            __DIR__.'/../public' => public_path('vendor/reviz'),
+            REVIZ_PATH.'/public' => public_path('vendor/reviz'),
         ], 'reviz-assets');
 
         $this->loadViewsFrom(
@@ -84,10 +88,9 @@ class RevizServiceProvider extends ServiceProvider
     private function routeConfiguration()
     {
         return [
-            // 'domain' => config('reviz.domain', null),
             'namespace' => 'Antoniputra\Reviz\Http\Controllers',
-            'prefix' => config('reviz.ui.path'),
-            // 'middleware' => 'reviz',
+            'prefix' => config('reviz.ui.prefixPath'),
+            'middleware' => config('reviz.ui.middleware', 'web'),
         ];
     }
 }

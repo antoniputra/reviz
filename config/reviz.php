@@ -31,16 +31,6 @@ return [
          * UI Status
          */
         'enabled' => env('REVIZ_UI_ENABLED', true),
-        
-        /**
-         * Reviz Domain
-         */
-        'domain' => env('REVIZ_UI_DOMAIN', null),
-    
-        /**
-         * Reviz Path
-         */
-        'path' => env('REVIZ_UI_PATH', 'reviz-panel'),
 
         /**
          * Get user email field
@@ -53,6 +43,24 @@ return [
          * @var string
          */
         'user_name' => 'name',
+
+        /**
+         * UI Middleware
+         */
+        'middleware' => ['web'],
+
+        /**
+         * Authorized email to access this UI
+         * @var array
+         */
+        'authorized_emails' => [
+            // 'admin@example.com'
+        ],
+    
+        /**
+         * Reviz Path
+         */
+        'prefixPath' => env('REVIZ_UI_PREFIX_PATH', 'reviz-panel'),
     ],
 
 ];

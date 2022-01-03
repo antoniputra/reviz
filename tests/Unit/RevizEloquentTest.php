@@ -11,6 +11,13 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class RevizEloquentTest extends TestCase
 {
     use DatabaseTransactions;
+    
+    public function testCountUpdatedFields_ShouldSuccess()
+    {
+        extract($this->scenarioUpdatePost());
+        $reviz = $post->revisionList->first();
+        $this->assertEquals(2, $reviz->count_updated_fields);
+    }
 
     public function testGetUserData_ShouldBasedFromConfig()
     {

@@ -58,7 +58,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <a href="{{route('revizPanel.show', $item->id)}}" class="italic text-blue-500 hover:underline text-sm hover:text-blue-400">
-                    {{$item->count_fields}} Fields
+                    {{$item->count_updated_fields}} Fields
                   </a>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">

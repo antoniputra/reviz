@@ -53,16 +53,14 @@ class RevizEloquent extends Model
         return $value ? json_decode($value, true) : null;
     }
 
-    public function getCountFieldsAttribute()
+    public function getCountUpdatedFieldsAttribute()
     {
         return count($this->old_value);
     }
 
     public function getCreatedAtAttribute($value)
     {
-        if ($value) {
-            return Carbon::parse($value);
-        }
+        return ! empty($value) ? Carbon::parse($value) : null;
     }
 
     public function getCreatedAtFormattedAttribute()
